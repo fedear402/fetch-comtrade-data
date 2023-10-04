@@ -141,7 +141,7 @@ def save_comtrade(
                                                 index=False) 
                                         break
     
-
+ 
     
     # Combina todo en un csv
     collapsed = [f for f in os.listdir(carpeta) if f.endswith('.csv')]
@@ -187,13 +187,10 @@ def plot(data_path, column_y):
 def plot_sector(data_path, sector, column_y):
     df = pd.read_csv(data_path)
     
-    # Filter data for the specified HS code (sector)
     sector_df = df[df['cmdCode'] == sector]
 
-    # Pivot to get the required structure for plotting
     pivot_df = sector_df.pivot_table(index='refYear', values=column_y, aggfunc='sum').reset_index()
 
-    # Create the line plot using plotly
     fig = px.bar(pivot_df, x='refYear', y=column_y, 
                   title=f"Yearly {column_y} for HS Code: {sector}")
 
