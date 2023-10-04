@@ -3,7 +3,6 @@ import time
 import pandas as pd
 import os
 import json
-os.chdir('/Users/fedelopez/Library/CloudStorage/OneDrive-Personal/Documents/UDESA/06/ECON_INTER/INCAKOLA/COMTRADE')
 
 partners_list = {}
 with open('partners.json', 'r') as file:
@@ -25,7 +24,7 @@ def save_comtrade(
         flujo="X",
         mensual = False,
         carpeta = "",
-        wait=4
+        wait=1
         ):
     '''
         reporter,       : str o lista de str (nombres de paises) / int o lista de int (codigos ONU)
@@ -43,9 +42,14 @@ def save_comtrade(
     if carpeta != "":
         pass
     else:
-        carpeta = f"{reporters}_{flujo}_{partners}_{años[0]}_{años[-1]}"
-    if not os.path.exists(carpeta):
-        os.makedirs(carpeta)
+        carpeta = f"{reporters}_{flujo}_{partners}_{años[0]}_{años[-1]}(1)"
+    
+    for ver in range(2, 10):
+        if not os.path.exists(carpeta):
+            os.makedirs(carpeta)
+            break
+        else:
+            carpeta = carpeta + f"({ver})"
 
     # FORMAT - Si se ingresa un solo año
     if isinstance(años, (int, float)):
@@ -141,6 +145,7 @@ def save_comtrade(
 
 
 if __name__ == "__main__":
+    os.chdir('/Users/fedelopez/Library/CloudStorage/OneDrive-Personal/Documents/UDESA/06/ECON_INTER/INCAKOLA/COMTRADE')
 
     # Exportaciones totales de peru a argentina
     save_comtrade(
@@ -164,6 +169,7 @@ if __name__ == "__main__":
             carpeta = "peru_arg_220210"
             )
     
+    # Exportaciones de agua mineral de peru a argentina mensual
     save_comtrade(
             reporters = "peru",
             partners = "argentina",
@@ -184,15 +190,3 @@ if __name__ == "__main__":
             mensual = False,
             carpeta = ""
             )
-
-
-'''
-import comtradeapicall
-data_peru_argentina_total = comtradeapicall.previewFinalData( 
-    typeCode='C', freqCode='A', clCode='HS', period="2001",
-    reporterCode=604, partnerCode=32, cmdCode='ALL', 
-    flowCode='X', maxRecords=2500, format_output='JSON', 
-    aggregateBy=None, breakdownMode='classic', countOnly=None, 
-    includeDesc=True, partner2Code=None, customsCode=None, motCode=None
-)
-'''
